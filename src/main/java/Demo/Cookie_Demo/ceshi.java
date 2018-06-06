@@ -1,7 +1,6 @@
 package Demo.Cookie_Demo;
 
 import org.jsoup.Jsoup;
-import org.jsoup.helper.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -26,21 +25,20 @@ public class ceshi {
         doc = Jsoup.connect(url).get();
         elems = doc.select(".tab-detail .item-list a");
         String content = null;
-        try {
-            for (Element item : elems) {
+        for (Element item : elems) {
+            try {
                 doc = Jsoup.connect(item.attr("href")).get();
                 content = doc.select(".content").first().text();
-                if(StringUtil.isBlank(content)){
-                    continue;
-                }
+                System.out.println("标题:" + item.text() + "\t内容:" + content);
                 map.put(item.attr("href"), content);
+            } catch (NullPointerException e) {
+                System.out.println("网站空指针");
+                continue;
             }
-        } catch (NullPointerException e) {
-            System.out.println("网站空指针");
         }
-        for (Map.Entry<String, String> item : map.entrySet()) {
+        /*for (Map.Entry<String, String> item : map.entrySet()) {
             System.out.println("\n" + "网址：" + item.getKey() + "\n" + "内容：" + item.getValue());
-        }
+        }*/
     }
 
 }

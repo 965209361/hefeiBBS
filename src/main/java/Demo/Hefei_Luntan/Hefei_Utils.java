@@ -23,7 +23,7 @@ public class Hefei_Utils {
      * @return
      */
     public static Properties prop(String propName) {
-        InputStream is = HeFeiBBS_HF.class.getClassLoader().getResourceAsStream(propName);
+        InputStream is = Hefei_Utils.class.getClassLoader().getResourceAsStream(propName);
         Properties properties = new Properties();
         try {
             properties.load(is);

@@ -50,7 +50,7 @@ public class HeFei_BBS {
                         }
                     }
                     content = docList.select(".pcb").first().text();
-                    fbsj = docList.select(".hm span:first-child").text().replace("发表于","").replace("更新于","");
+                    fbsj = docList.select(".hm span:first-child").text().replace("发表于", "").replace("更新于", "");
                     elemsList = docList.select(".pcb");
                     List<String> list = new ArrayList<>();
                     if (fbsj == null || content == null || title == null) {
@@ -93,7 +93,7 @@ public class HeFei_BBS {
                     while (content.length() >= 100) {
                         content = content.substring(1, 100);
                     }
-                    System.out.println("标题:" + title +"-------------内容: "+ content + "\t网址: " + listUrl);
+                    System.out.println("标题:" + title + "-------------内容: " + content + "\t网址: " + listUrl);
                 }
                 String buffTo = buffer.toString();
                 if (!buffTo.isEmpty()) {
@@ -108,9 +108,9 @@ public class HeFei_BBS {
                 System.out.println("本次刷新结束!");
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println(title + "出错!!!!!!!!!!!!!!");
+                System.out.println(title + "IOE出错!!!!!!!!!!!!!!");
             } catch (NullPointerException e) {
-                System.out.println(title + "出错!!!!!!!!!!!!!!");
+                System.out.println(title + "NullPointer出错!!!!!!!!!!!!!!");
             }
         });
         pool.shutdown();

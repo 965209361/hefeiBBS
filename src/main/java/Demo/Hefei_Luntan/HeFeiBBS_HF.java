@@ -9,6 +9,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlForm;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.gargoylesoftware.htmlunit.html.HtmlTextArea;
 import com.gargoylesoftware.htmlunit.util.Cookie;
+import org.apache.commons.codec.binary.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -19,9 +20,13 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 
-//对于一些比较好的新闻进行评论
-public class HeFeiBBS_HF {
 
+public class HeFeiBBS_HF {
+    /**
+     * 启动资讯
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         List<HeFeiBBS_Domain> listDomain = HeFei_Luntan();
@@ -33,24 +38,21 @@ public class HeFeiBBS_HF {
             System.out.println("内  容: " + item.getContent());
             System.out.println("回复数:" + item.getCommentCount() + "\t回复内容:" + item.getComment());
             System.out.println();
-            System.out.println("皇上是否批阅此奏折:(1批阅--8或bye退出--url查看网址)");
+            System.out.println("皇上是否批阅此奏折:(1批阅--2查看网址--3退出)");
             String isTrue = scanner.next();
             if (isTrue.equals("1")) {
                 System.out.println("正为吾皇打开奏折,皇上请稍后...");
                 heFeiBBSHF.pinglun(item.getListUrl(), item.getTitle());
-            }else if (isTrue.equals("8")||isTrue.equals("bye")){
+            } else if (isTrue.equals("2") || isTrue.equals("url")) {
+                System.out.println("网址详情为: " + item.getListUrl());
+            } else if (isTrue.equals("3") || isTrue.equals("bye")) {
                 break;
-            }else if (isTrue.equals("url")){
-                System.out.println("网址详情为: "+item.getListUrl());
             }
             System.out.println("陛下,微臣为您翻阅下一条奏章,请皇上稍后...");
             System.out.println();
         }
         System.out.println("退朝!");
     }
-
-    //去掉CSS警告
-
 
     //region原版本
     /*public static void main(String[] args) {
@@ -78,6 +80,12 @@ public class HeFeiBBS_HF {
     //endregion
     int num = 1;
 
+    /**
+     * 评论资讯
+     *
+     * @param url
+     * @param title
+     */
     public void pinglun(String url, String title) {
         WebClient webClient = new WebClient(BrowserVersion.FIREFOX_52);
 //        webClient.getOptions().setJavaScriptEnabled(false); //关闭JS
@@ -85,6 +93,9 @@ public class HeFeiBBS_HF {
         webClient.getOptions().setThrowExceptionOnFailingStatusCode(false);
         webClient.getOptions().setThrowExceptionOnScriptError(false);
         webClient.getOptions().setPrintContentOnFailingStatusCode(false);
+        /**
+         * 去除CSS相关控制台警告
+         */
         java.util.logging.Logger.getLogger("net.sourceforge.htmlunit").setLevel(Level.OFF);
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.OFF);
         String cookie = Hefei_Utils.QueryCookie();
@@ -149,13 +160,18 @@ public class HeFeiBBS_HF {
                     System.out.println("😔（＞人＜；）奏章都不会批,换奏折");
                 }
             } else {
-                System.out.println("退出此奏折!"+url);
+                System.out.println("退出此奏折!" + url);
             }
         }
 
         webClient.close();
     }
 
+    /**
+     * 采集资讯
+     *
+     * @return
+     */
     public static List<HeFeiBBS_Domain> HeFei_Luntan() {
         System.out.println("奏折采集中...请皇上稍等");
         Document doc = null;
@@ -217,6 +233,8 @@ public class HeFeiBBS_HF {
             if (hefeiList.size() == 40) {
                 System.out.println("奏折已采集40份,请君稍后...");
             }
+
+
         }
         System.out.println("奏章整理完毕,准备上朝!");
         return hefeiList;
